@@ -1,15 +1,14 @@
+#!/usr/bin/python
+
 from colorsys import rgb_to_hls, hls_to_rgb
 import six
 
-if six.PY3:
-  from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSizePolicy, QStyleOption
-  from PyQt5.QtGui import QPainter
-  from PyQt5.QtCore import pyqtSignal, Qt, QSize, QTimer, QByteArray, QRectF, pyqtProperty
-  from PyQt5.QtSvg import QSvgRenderer
-else:
-  from PyQt4.QtGui import QApplication, QWidget, QPainter, QGridLayout, QSizePolicy, QStyleOption
-  from PyQt4.QtCore import pyqtSignal, Qt, QSize, QTimer, QByteArray, QRectF, pyqtProperty
-  from PyQt4.QtSvg import QSvgRenderer
+# Removed the correspondence between python versions and PyQt versions. Settling on
+# PyQt5 no matter what
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QSizePolicy, QStyleOption
+from PyQt5.QtGui import QPainter
+from PyQt5.QtCore import pyqtSignal, Qt, QSize, QTimer, QByteArray, QRectF, pyqtProperty
+from PyQt5.QtSvg import QSvgRenderer
 
 class QLed(QWidget):
     Circle   = 1
@@ -17,13 +16,14 @@ class QLed(QWidget):
     Square   = 3
     Triangle = 4
 
-    Red    = 1
-    Green  = 2
-    Yellow = 3
-    Grey   = 4
-    Orange = 5
-    Purple = 6
-    Blue   = 7
+    Red       = 1
+    DarkGreen = 2
+    Green     = 3
+    Yellow    = 4
+    Grey      = 5
+    Orange    = 6
+    Purple    = 7
+    Blue      = 8
 
     shapes={
         Circle:"""
@@ -263,13 +263,14 @@ class QLed(QWidget):
         """
     }
 
-    colours={Red    : (0xCF, 0x00, 0x00), 
-             Green  : (0x0f, 0x69, 0x00), 
-             Yellow : (0xd2, 0xcd, 0x00), 
-             Grey   : (0x5a, 0x5a, 0x5a),
-             Orange : (0xda, 0x46, 0x15), 
-             Purple : (0x87, 0x00, 0x83), 
-             Blue   : (0x00, 0x03, 0x9a)}
+    colours={Red          : (0xCF, 0x00, 0x00), 
+             DarkGreen    : (0x0f, 0x99, 0x0f),
+             Green        : (0x0f, 0xcd, 0x00), # was 0x69, but made that DarkGreen
+             Yellow       : (0xd2, 0xcd, 0x00), 
+             Grey         : (0x5a, 0x5a, 0x5a),
+             Orange       : (0xda, 0x46, 0x15), 
+             Purple       : (0x87, 0x00, 0x83), 
+             Blue         : (0x00, 0x03, 0x9a)}
 
     clicked=pyqtSignal()
     pressed=pyqtSignal(bool)
@@ -318,7 +319,7 @@ class QLed(QWidget):
     def sizeHint(self): 
         if self.m_shape==QLed.Triangle: return QSize(64,48)
         elif self.m_shape==QLed.Round: return QSize(96, 48)
-        return QSize(48,48)
+        return QSize(24,24)
 
     def adjust(self, r, g, b):
         def normalise(x): return x/255.0
